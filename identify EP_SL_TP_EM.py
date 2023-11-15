@@ -128,11 +128,13 @@ long_total_exit_market = pickle.load(list_file)
 
 '''2023.11.15'''
 def cal_probability_of_win_loss_exit(total_entry_points, total_stop_loss, total_take_profit, total_exit_market):
+    # Initialize a 15-minute sliding window and 1-minute step size
     window_size = timedelta(minutes=15)
     step_size = timedelta(minutes=1)
+    # Set the start and end time of the sliding window
     start_time = datetime.strptime('00:00:00', '%H:%M:%S')
     end_time = datetime.strptime('23:59:59', '%H:%M:%S')
-    
+    # Iterate to calculate the number of data points in each sliding window
     current_time = start_time
     while current_time + window_size <= end_time:
         window_end_time = current_time + window_size
@@ -150,11 +152,11 @@ def cal_probability_of_win_loss_exit(total_entry_points, total_stop_loss, total_
             count_stop_loss += len([elem for elem in total_stop_loss[i] if elem[1] in index_entry_point])
             count_take_profit += len([elem for elem in total_take_profit[i] if elem[1] in index_entry_point])
             count_exit_market += len([elem for elem in total_exit_market[i] if elem[1] in index_entry_point])
-        print(current_time, window_end_time)
-        print(count_entry_point)
-        print(count_stop_loss)
-        print(count_take_profit)
-        print(count_exit_market, "\n")
+        print(current_time.strftime('%H:%M:%S'), window_end_time.strftime('%H:%M:%S'))
+        print("The number of entry points is: ", count_entry_point)
+        print("The number of stoploss is: ", count_stop_loss)
+        print("The number of takeprofit is: ", count_take_profit)
+        print("The number of exitmarket is: ", count_exit_market, "\n")
         current_time += step_size
 
 cal_probability_of_win_loss_exit(total_entry_points = long_total_entry_points, total_stop_loss = long_total_stop_loss, total_take_profit = long_total_take_profit, total_exit_market = long_total_exit_market)
